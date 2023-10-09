@@ -1002,6 +1002,11 @@ NS_REFINED_FOR_SWIFT;
                          success:(void (^)(void))success
                          failure:(void (^)(NSError *error))failure NS_REFINED_FOR_SWIFT;
 
+- (MXHTTPOperation*)updateStateEvent:(NSString*)roomId
+                            evenType:(MXEventTypeString)eventType
+                               value:(NSDictionary*)value
+                             success:(void (^)(void))success
+                             failure:(void (^)(NSError *error))failure NS_REFINED_FOR_SWIFT;
 /**
  Get the topic of a room.
 

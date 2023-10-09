@@ -2181,6 +2181,18 @@ andUnauthenticatedHandler: (MXRestClientUnauthenticatedHandler)unauthenticatedHa
                           success:success failure:failure];
 }
 
+- (MXHTTPOperation*)updateStateEvent:(NSString*)roomId
+                            evenType:(MXEventTypeString)eventType
+                               value:(NSDictionary*)value
+                         success:(void (^)(void))success
+                         failure:(void (^)(NSError *error))failure
+{
+    return [self updateStateEvent:eventType
+                        withValue:value
+                           inRoom:roomId
+                          success:success failure:failure];
+}
+
 - (MXHTTPOperation*)topicOfRoom:(NSString*)roomId
                         success:(void (^)(NSString *topic))success
                         failure:(void (^)(NSError *error))failure
