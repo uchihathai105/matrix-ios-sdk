@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "MatrixSDK"
-  s.version      = "0.26.12"
+  s.version      = "0.27.6"
   s.summary      = "The iOS SDK to build apps compatible with Matrix (https://www.matrix.org)"
 
   s.description  = <<-DESC
@@ -45,7 +45,7 @@ Pod::Spec.new do |s|
       ss.dependency 'OLMKit', '~> 3.2.5'
       ss.dependency 'Realm'
       ss.dependency 'libbase58', '~> 0.1.4'
-      ss.dependency 'MatrixSDKCrypto', '0.3.11', :configurations => ["DEBUG", "RELEASE"], :inhibit_warnings => true
+      ss.dependency 'MatrixSDKCrypto', '0.3.13', :configurations => ["DEBUG", "RELEASE"], :inhibit_warnings => true
   end
 
   s.subspec 'JingleCallStack' do |ss|

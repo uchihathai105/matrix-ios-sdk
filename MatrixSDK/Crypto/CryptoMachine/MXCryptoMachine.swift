@@ -187,7 +187,8 @@ extension MXCryptoMachine: MXCryptoSyncing {
         toDevice: MXToDeviceSyncResponse?,
         deviceLists: MXDeviceListResponse?,
         deviceOneTimeKeysCounts: [String: NSNumber],
-        unusedFallbackKeys: [String]?
+        unusedFallbackKeys: [String]?,
+        nextBatchToken: String
     ) throws -> MXToDeviceSyncResponse {
         let events = toDevice?.jsonString() ?? "[]"
         let deviceChanges = DeviceLists(
@@ -200,7 +201,8 @@ extension MXCryptoMachine: MXCryptoSyncing {
             events: events,
             deviceChanges: deviceChanges,
             keyCounts: keyCounts,
-            unusedFallbackKeys: unusedFallbackKeys
+            unusedFallbackKeys: unusedFallbackKeys,
+            nextBatchToken: nextBatchToken
         )
         
         var deserialisedToDeviceEvents = [Any]()
@@ -366,6 +368,10 @@ extension MXCryptoMachine: MXCryptoDevicesSource {
             log.error("Cannot fetch device", context: error)
             return nil
         }
+    }
+    
+    func dehydratedDevices() -> DehydratedDevicesProtocol {
+        machine.dehydratedDevices()
     }
 }
 
@@ -607,6 +613,23 @@ extension MXCryptoMachine: MXCryptoCrossSigning {
             log.error("Failed importing cross signing keys", context: error)
         }
     }
+    
+    func queryMissingSecretsFromOtherSessions() async throws {
+        let isMissingSecrets = try machine.queryMissingSecretsFromOtherSessions()
+        
+        if (isMissingSecrets) {
+            // Out-of-sync check if there are any secret request to send out as a result of
+            // the missing secret request
+            for request in try machine.outgoingRequests() {
+                if case .toDevice(_, let eventType, _) = request {
+                    if (eventType == kMXEventTypeStringSecretRequest) {
+                        try await handleRequest(request)
+                    }
+                }
+            }
+        }
+    }
+    
 }
 
 extension MXCryptoMachine: MXCryptoVerifying {
