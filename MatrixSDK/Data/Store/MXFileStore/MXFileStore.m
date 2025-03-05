@@ -117,6 +117,8 @@ static NSUInteger preloadOptions;
 
     // The evenst stream token that corresponds to the data being backed up.
     NSString *backupEventStreamToken;
+    
+    NSString *_storePrefix;
 }
 
 // The commit to file store background task
@@ -170,6 +172,19 @@ static NSUInteger preloadOptions;
     if (self)
     {
         credentials = someCredentials;
+        [self setupRoomSummaryStore];
+        [self setUpStoragePaths];
+    }
+    return self;
+}
+
+- (instancetype)initWithCredentials:(MXCredentials *)someCredentials storePrefix:(NSString *)storePrefix
+{
+    self = [self init];
+    if (self)
+    {
+        credentials = someCredentials;
+        _storePrefix = storePrefix;
         [self setupRoomSummaryStore];
         [self setUpStoragePaths];
     }
@@ -1120,7 +1135,11 @@ static NSUInteger preloadOptions;
         cachePath  = [cacheDirList objectAtIndex:0];
     }
     
-    storePath = [[cachePath stringByAppendingPathComponent:kMXFileStoreFolder] stringByAppendingPathComponent:credentials.userId];
+    if (_storePrefix && _storePrefix.length > 0) {
+        storePath = [[cachePath stringByAppendingPathComponent:kMXFileStoreFolder] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@%@", credentials.userId, _storePrefix]];
+    } else {
+        storePath = [[cachePath stringByAppendingPathComponent:kMXFileStoreFolder] stringByAppendingPathComponent:credentials.userId];
+    }
     storeRoomsPath = [storePath stringByAppendingPathComponent:kMXFileStoreRoomsFolder];
     storeUsersPath = [storePath stringByAppendingPathComponent:kMXFileStoreUsersFolder];
     storeGroupsPath = [storePath stringByAppendingPathComponent:kMXFileStoreGroupsFolder];

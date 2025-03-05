@@ -101,7 +101,7 @@ typedef NS_OPTIONS(NSInteger, MXFileStorePreloadOptions)
  @param someCredentials the credentials of the account.
 */
 - (instancetype)initWithCredentials:(MXCredentials *)someCredentials;
-
+- (instancetype)initWithCredentials:(MXCredentials *)someCredentials storePrefix:(NSString *)storePrefix;
 /**
  The disk space in bytes used by the store.
 
