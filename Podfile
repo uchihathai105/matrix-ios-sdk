@@ -13,7 +13,7 @@ abstract_target 'MatrixSDK' do
 
     pod 'SwiftyBeaver', '1.9.5'
     
-    pod 'Realm'
+    pod 'Realm', '10.27.0'
     pod 'libbase58', '~> 0.1.4'
     pod 'MatrixSDKCrypto', '0.4.3', :inhibit_warnings => true
     
