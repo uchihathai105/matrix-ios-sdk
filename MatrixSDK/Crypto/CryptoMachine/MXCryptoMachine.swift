@@ -145,7 +145,14 @@ class MXCryptoMachine {
                     path: url.path,
                     passphrase: passphrase
                 )
-
+            } else if case CryptoStoreError.OpenStore(let _) = error {
+                try FileManager.default.removeItem(at: url)
+                return try OlmMachine(
+                    userId: userId,
+                    deviceId: deviceId,
+                    path: url.path,
+                    passphrase: passphrase
+                )
             // Otherwise re-throw the error
             } else {
                 throw error
